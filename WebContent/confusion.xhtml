@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"  
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j" xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>User intention</title>
+	<style type="text/css">
+.colStyle1 {
+	width: 150px;
+	vertical-align: top;
+}
+
+.colStyle2 {
+	width: 660px;
+	height: 100%;
+}
+
+.rich-spinner-input-container {
+	background-color: #CC2222;
+}
+</style>
+</h:head>
+<h:body>
+	<f:view>
+		<h2>
+			<h:outputText id="error" rendered="#{inputdata.error}"
+				value="#{inputdata.errorLog}" />
+		</h2>
+		<h:panelGrid id="matrix" columns="2"
+			columnClasses="colStyle2, colStyle2" border="1">
+			<ui:insert name="matrix">
+				<ui:include src="matrix.xhtml"></ui:include>
+			</ui:insert>
+			<ui:insert name="config">
+				<ui:include src="config.xhtml"></ui:include>
+			</ui:insert>
+			<h:panelGroup id="includeContainer">
+				<h:panelGroup rendered="#{!inputdata.blnBoost}">
+					<ui:include src="chart.xhtml" />
+					<!--  <ui:include src="demo2_clientSideEvents.xhtml" /> -->
+				</h:panelGroup>
+				<h:panelGroup rendered="#{inputdata.blnBoost}">
+					<ui:include src="mboost_table.xhtml" />
+				</h:panelGroup>
+			</h:panelGroup>
+			<!-- <ui:insert name="chart">
+				<ui:include src="chart.xhtml"></ui:include>
+			</ui:insert>-->
+		</h:panelGrid>
+	</f:view>
+</h:body>
+</html>

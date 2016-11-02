@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+<head>
+<title>IGNORED</title>
+</head>
+<body>
+	<ui:composition>
+		<p:layoutUnit id="chartlayout" position="center">
+			<p:growl id="growl" showDetail="true" />
+			<h:form>
+				<p:poll widgetVar="chartpoll" interval="3" update=":chartPanel"
+					autoStart="true" />
+			</h:form>
+			<p:panelGrid columns="1" id="chartPanel">
+				<p:lineChart xaxisLabel="Iteration" yaxisLabel="False Positives"
+					minX="0" value="#{metachart.model}" legendPosition="nw"
+					update="info" style="height:350px;width: 660px;">
+					<p:ajax event="itemSelect" listener="#{metachart.itemSelect}"
+						update=":matform:confmatrix, :popup" />
+				</p:lineChart>
+			</p:panelGrid>
+		</p:layoutUnit>
+		<p:dialog id="popup" style="text-align:center" widgetVar="dlg1"
+			modal="false" visible="#{metachart.selected}" header="Confirmation"
+			hideEffect="explode">
+			<h:form id="downloadform">
+				<h:outputText value="Download the model?" />
+				<p:commandButton id="downloadLink" value="Yes"
+					styleClass="ui-confirmdialog-yes" ajax="false" icon="ui-icon-check"
+					onclick="dlg1.hide()">
+					<p:fileDownload value="#{metachart.file}" />
+				</p:commandButton>
+				<p:commandButton value="No" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+					onclick="dlg1.hide()" />
+			</h:form>
+		</p:dialog>
+	</ui:composition>
+</body>
+</html>

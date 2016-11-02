@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:p="http://primefaces.org/ui">
+<head>
+    <title>IGNORED</title>
+</head>
+	<body>	
+		<ui:composition>
+			<h:form>
+				<h:panelGrid columns="3" border="0"
+					columnClasses="colStyle1, colStyle1, colStyle1">
+					<h:outputText />
+					<h:outputText value="Predicted" />
+					<h:outputText />
+
+					<h:outputText />
+					<rich:inputNumberSpinner maxValue="100000"
+						value="#{inputdata.dispMatrix.tn}" />
+					<rich:inputNumberSpinner maxValue="100000"
+						value="#{inputdata.dispMatrix.fp}" />
+
+					<h:outputText value="True" />
+					<h:outputText />
+					<h:outputText />
+
+					<h:outputText />
+					<rich:inputNumberSpinner maxValue="100000"
+						value="#{inputdata.dispMatrix.fn}" />
+					<rich:inputNumberSpinner maxValue="100000"
+						value="#{inputdata.dispMatrix.tp}" />
+				</h:panelGrid>
+				<br />
+				<br />
+				<!-- <h:commandButton value="Submit" action="#{inputdata.update}"
+					style="font-size: 16px; horizontal-align: center;" />-->
+				<p:commandButton value="Submit" action="#{inputdata.update}"
+					async="true" style="font-size: 16px; horizontal-align: center;"
+					render="error" update=":chartlayout"
+					onclick="disable();chartpoll.start();" />
+			</h:form>
+		</ui:composition>
+	</body>
+</html>

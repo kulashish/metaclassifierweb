@@ -1,0 +1,9 @@
+@begin_prediction <true label> <pred label> <class score>...
+1 1 0.8 0.2
+@end_prediction
+@begin_confusion
+50 30 40 20
+@end_confusion
+@begin_model <num params> <param1> <param2> ...
+1 0.5
+@end_model

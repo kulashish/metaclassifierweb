@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"  
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j" xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition>
+		<!--  <ui:include src="header.xhtml"/>-->
+		<p:layoutUnit id="mboostlayout" position="center"
+			style="height:400px;width:99%; border:solid 1px; padding:2px; float:left">
+			<h:form>
+				<ui:repeat value="#{inputdata.mbGraph.graphModel}" var="row">
+					<ui:repeat value="#{row}" var="nested_row">
+						<h:inputText value="#{nested_row.number}" readonly="false">
+							<a4j:ajax event="click" listener="#{inputdata.mbGraph.showNode}" />
+						</h:inputText>
+					</ui:repeat>
+					<br />
+				</ui:repeat>
+			</h:form>
+		</p:layoutUnit>
+	</ui:composition>
+</h:body>
+</html>

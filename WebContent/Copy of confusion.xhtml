@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"  
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j" xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>User intention</title>
+	<style type="text/css">
+.colStyle1 {
+	width: 150px;
+	vertical-align: top;
+}
+
+.colStyle2 {
+	width: 660px;
+	height: 100%;
+}
+
+.rich-spinner-input-container {
+	background-color: #CC2222;
+}
+</style>
+</h:head>
+<h:body>
+	<f:view>
+		<h2>
+			<h:outputText id="error" rendered="#{inputdata.error}"
+				value="#{inputdata.errorLog}" />
+		</h2>
+		<h:panelGrid id="matrix" columns="2"
+			columnClasses="colStyle2, colStyle2" border="1">
+			<h:form>
+				<h:panelGrid columns="3" border="0"
+					columnClasses="colStyle1, colStyle1, colStyle1">
+					<h:outputText />
+					<h:outputText value="Predicted" />
+					<h:outputText />
+
+					<h:outputText />
+					<rich:inputNumberSpinner maxValue="100000"
+						value="#{inputdata.dispMatrix.tn}" />
+					<rich:inputNumberSpinner maxValue="100000"
+						value="#{inputdata.dispMatrix.fp}" />
+
+					<h:outputText value="True" />
+					<h:outputText />
+					<h:outputText />
+
+					<h:outputText />
+					<rich:inputNumberSpinner maxValue="100000"
+						value="#{inputdata.dispMatrix.fn}" />
+					<rich:inputNumberSpinner maxValue="100000"
+						value="#{inputdata.dispMatrix.tp}" />
+				</h:panelGrid>
+				<br />
+				<br />
+				<!-- <h:commandButton value="Submit" action="#{inputdata.update}"
+					style="font-size: 16px; horizontal-align: center;" />-->
+				<p:commandButton value="Submit" action="#{inputdata.update}"
+					async="true" style="font-size: 16px; horizontal-align: center;"
+					render="error" update=":chartlayout"
+					onclick="disable();chartpoll.start();" />
+			</h:form>
+			<h:form id="configform">
+				<h:panelGrid id="conf" columns="2">
+					<h:outputText value="Initial Step size" />
+					<h:inputText id="step" value="#{inputdata.initialStepSize}">
+						<a4j:ajax event="blur" />
+					</h:inputText>
+
+					<h:outputText value="Maximum Iterations" />
+					<h:inputText id="iter" value="#{inputdata.maxIterations}">
+						<a4j:ajax event="blur" />
+					</h:inputText>
+
+					<h:outputText value="Upload files" />
+					<rich:fileUpload fileUploadListener="#{fileupload.listener}"
+						id="upload" acceptedTypes="arff" listHeight="100px"
+						ontyperejected="alert('Only ARFF files are accepted');"
+						maxFilesQuantity="2">
+						<a4j:ajax event="uploadcomplete" execute="@none" render="conf" />
+					</rich:fileUpload>
+
+					<h:outputText value="Train file" />
+					<h:selectOneMenu id="train" value="#{inputdata.trainFile}">
+						<f:selectItems value="#{fileupload.files}" var="f"
+							itemLabel="#{f}" itemValue="#{f}" />
+						<a4j:ajax event="blur" />
+					</h:selectOneMenu>
+
+					<h:outputText value="Holdout file" />
+					<h:selectOneMenu id="holdout" value="#{inputdata.holdoutFile}">
+						<f:selectItems value="#{fileupload.files}" var="f"
+							itemLabel="#{f}" itemValue="#{f}" />
+						<a4j:ajax event="blur" />
+					</h:selectOneMenu>
+				</h:panelGrid>
+				<br />
+				<br />
+				<p:commandButton value="Update" action="#{inputdata.loadData}"
+					style="font-size: 16px; horizontal-align: center;"
+					update=":matrix :error" onclick="disable();" />
+			</h:form>
+			<p:layoutUnit id="chartlayout" position="center">
+				<p:growl id="growl" showDetail="true" />
+				<h:form>
+					<p:poll widgetVar="chartpoll" interval="3" update=":chartPanel"
+						autoStart="true" />
+				</h:form>
+				<p:panelGrid columns="1" id="chartPanel">
+					<p:lineChart xaxisLabel="Iteration" yaxisLabel="False Positives"
+						minX="0" value="#{metachart.model}" legendPosition="nw"
+						update="info" style="height:350px;width: 660px;">
+						<p:ajax event="itemSelect" listener="#{metachart.itemSelect}"
+							update="growl" />
+					</p:lineChart>
+				</p:panelGrid>
+			</p:layoutUnit>
+		</h:panelGrid>
+	</f:view>
+</h:body>
+</html>

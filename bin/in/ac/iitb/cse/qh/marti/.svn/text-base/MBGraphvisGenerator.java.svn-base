@@ -1,0 +1,79 @@
+package in.ac.iitb.cse.qh.marti;
+
+import in.ac.iitb.cse.qh.util.BeanFinder;
+import in.ac.iitb.cse.qh.util.MetaConstants;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.primefaces.model.graphvis.GraphvisEdge;
+import org.primefaces.model.graphvis.GraphvisModel;
+import org.primefaces.model.graphvis.GraphvisNode;
+
+public class MBGraphvisGenerator {
+	private static final Logger LOGGER = Logger
+			.getLogger(MBGraphvisGenerator.class.getName());
+
+	static {
+		LOGGER.setLevel(Level.INFO);
+	}
+
+	public static MBGraphBean generateGraph(MartiBoost mboost) {
+		MBGraphBean mBean = (MBGraphBean) BeanFinder
+				.findBean(MetaConstants.BEAN_MBOOST_GRAPH);
+		if (null == mBean)
+			mBean = new MBGraphBean();
+
+		mBean.setMarti(mboost);
+		GraphvisModel model = mBean.getGraphModel();
+
+		GraphvisNode mbRoot = model.addNode("V-00", "V-00");
+
+		List<GraphvisNode> graphNodes = new ArrayList<GraphvisNode>();
+		graphNodes.add(mbRoot);
+		for (int level = 1; level < mboost.getNumLevels(); level++) {
+			LOGGER.log(Level.INFO, "Adding level " + level);
+			graphNodes = addLevel(level, model, mboost.getRoot(), graphNodes);
+		}
+		return mBean;
+	}
+
+	public static List<GraphvisNode> addLevel(int level, GraphvisModel model,
+			MartiNode node, List<GraphvisNode> graphNodes) {
+		GraphvisNode graphNode = null;
+		GraphvisNode leftGraphNode = null;
+		GraphvisNode rightGraphNode = null;
+		List<GraphvisNode> newGraphLevelNodes = new ArrayList<GraphvisNode>();
+		GraphvisEdge edge = null;
+		for (int i = 0; i < graphNodes.size(); i++) {
+			graphNode = graphNodes.get(i);
+			if (i == 0) {
+				leftGraphNode = model.addNode("V" + level + i, "V" + level + i);
+				edge = model.addEdge(
+						graphNode.getId() + "_" + leftGraphNode.getId(), "",
+						graphNode, leftGraphNode);
+				edge.setWidth(1);
+				edge.setDirected(true);
+				newGraphLevelNodes.add(leftGraphNode);
+			} else {
+				edge = model.addEdge(
+						graphNode.getId() + "_" + rightGraphNode.getId(), "",
+						graphNode, rightGraphNode);
+				edge.setWidth(1);
+				edge.setDirected(true);
+			}
+
+			rightGraphNode = model.addNode("V" + level + (i + 1), "V" + level
+					+ (i + 1));
+			edge = model.addEdge(
+					graphNode.getId() + "_" + rightGraphNode.getId(), "",
+					graphNode, rightGraphNode);
+			edge.setWidth(1);
+			edge.setDirected(true);
+			newGraphLevelNodes.add(rightGraphNode);
+		}
+		return newGraphLevelNodes;
+	}
+}

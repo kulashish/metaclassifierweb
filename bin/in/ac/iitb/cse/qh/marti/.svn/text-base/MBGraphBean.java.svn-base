@@ -1,0 +1,45 @@
+package in.ac.iitb.cse.qh.marti;
+
+import java.io.Serializable;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
+import org.primefaces.model.graphvis.GraphvisModel;
+import org.primefaces.model.graphvis.impl.GraphvisModelImpl;
+
+@ManagedBean(name = "mbgraph", eager = true)
+@SessionScoped
+public class MBGraphBean implements Serializable {
+	private MartiBoost mboost;
+	private GraphvisModel graphModel;
+
+	public MBGraphBean() {
+	}
+
+	public GraphvisModel getGraphModel() {
+		if (null == graphModel) {
+			graphModel = new GraphvisModelImpl();
+			graphModel.setLayout("ForceDirected");
+		}
+		return graphModel;
+	}
+
+	public void setGraphModel(GraphvisModel graphModel) {
+		this.graphModel = graphModel;
+	}
+
+    public void onSelectNodes(SelectEvent event){
+        System.out.println("NODES SELECTION:" + event.getObject());
+    }
+ 
+    public void onUnselectNodes(UnselectEvent event){
+        System.out.println("NODES UNSELECTION:" + event.getObject());
+    }
+
+	public void setMarti(MartiBoost mboost) {
+		this.mboost = mboost;
+	}
+}

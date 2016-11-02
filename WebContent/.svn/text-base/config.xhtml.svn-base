@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:a4j="http://richfaces.org/a4j">
+<head>
+    <title>IGNORED</title>
+</head>
+	<body>	
+		<ui:composition>			
+			<h:form id="configform">
+				<h:panelGrid id="conf" columns="2">
+					<h:outputText value="Initial Step size" />
+					<h:inputText id="step" value="#{inputdata.initialStepSize}">
+						<a4j:ajax event="blur" />
+					</h:inputText>
+
+					<h:outputText value="Maximum Iterations" />
+					<h:inputText id="iter" value="#{inputdata.maxIterations}">
+						<a4j:ajax event="blur" />
+					</h:inputText>
+
+					<h:outputText value="Upload files" />
+					<rich:fileUpload fileUploadListener="#{fileupload.listener}"
+						id="upload" acceptedTypes="arff" listHeight="100px"
+						ontyperejected="alert('Only ARFF files are accepted');"
+						maxFilesQuantity="2">
+						<a4j:ajax event="uploadcomplete" execute="@none" render="conf" />
+					</rich:fileUpload>
+
+					<h:outputText value="Train file" />
+					<h:selectOneMenu id="train" value="#{inputdata.trainFile}">
+						<f:selectItems value="#{fileupload.files}" var="f"
+							itemLabel="#{f}" itemValue="#{f}" />
+						<a4j:ajax event="blur" />
+					</h:selectOneMenu>
+
+					<h:outputText value="Holdout file" />
+					<h:selectOneMenu id="holdout" value="#{inputdata.holdoutFile}">
+						<f:selectItems value="#{fileupload.files}" var="f"
+							itemLabel="#{f}" itemValue="#{f}" />
+						<a4j:ajax event="blur" />
+					</h:selectOneMenu>
+				</h:panelGrid>
+				<br />
+				<br />
+				<p:commandButton value="Update" action="#{inputdata.loadData}"
+					style="font-size: 16px; horizontal-align: center;"
+					update=":matrix :error" onclick="disable();" />
+			</h:form>
+		</ui:composition>
+	</body>
+</html>
